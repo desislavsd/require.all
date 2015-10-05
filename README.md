@@ -59,17 +59,17 @@ require('require.all')()(function(name, module){
     return module(1,2,3,4)
 })
 ```
-*Notice:* If you want to resolve your modules with a single argument and it's type is `'function'`, you should use: `require('require.all')('.')([app])`.
+*Notice:* If you want to resolve your modules with a single argument and it's type is `'function'`, you should use: `require('require.all')('./')([app])`.
 ## Defaults
 You can see the defaults by `require('require.all').defaults`; Modifying this object will not affect the module's work.
 ```js
 var defaults = {
-        dir:        '.',                
-        match:      null,               
-        not:        /^\./,              
-        ignore:     /^\.|node_modules/, 
-        map:        map,
-        recursive:  false,
+        dir:        '.',                // current directory
+        match:      null,               // match any file
+        not:        /^\./,              // do not require files which name begins with '.'
+        ignore:     /^\.|node_modules/, // do not traverse dirs which name begins with '.'; ignore node_modules
+        map:        map,                // remove extensions & transform to camelCased
+        recursive:  false,              // do not traverse child directories
 }
 ```
 - **dir** - [string] - the directory to be required
@@ -92,6 +92,7 @@ map('home_controller')  // homeController
 map('_me to')           // MeTo
 ```
 - **recursive** - [boolean] - weather the package shuld traverse child directories or not
+
 ## Example
 ```js
 var app = require('express')();
