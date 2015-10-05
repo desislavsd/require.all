@@ -4,6 +4,7 @@ Easy way to `require()` all your modules in a directory.
 ```sh
 $ npm install require.all --save
 ```
+myjsfile.js:
 ```js
 require.all = require('require.all');
 var controllers = require.all('./controllers');
