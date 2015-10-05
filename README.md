@@ -63,7 +63,7 @@ require('require.all')()(function(name, module){
 ```
 *Notice:* If you want to resolve your modules with a single argument and it's type is `'function'`, you should use: `require('require.all')('./')([app])`.
 ## Defaults
-You can see the defaults by `require('require.all').defaults`; Modifying this object will not affect the module's work.
+You can see the defaults by `require('require.all').defaults`; Modifying this object will not have effect.
 ```js
 var defaults = {
         dir:        '.',                // current directory
