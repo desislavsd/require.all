@@ -12,7 +12,7 @@ var homeController = controllers.home;
 ```
 ## Advanced usage
 All parameters are optional. Executing `require('require.all')()` will require all the modules from the current (`'.'`) directory, using default options, and will return an object with their references. `require.all` accepts string parameter for the directory or object parameter with options or both. All of the followings are valid:
-```
+```js
 var require.all = require('require.all');
 
 require.all();
@@ -22,9 +22,10 @@ require.all('./', {recursive: true});
 ```
 Check out the full list of available options in the defaults section.
 
-When executed, the `require.all` module actually returns a function. Since in javascript functions are objects, you can access your modules using `.` notation and at the same time have some extra functionality. In our case you are allowed to quickly resolve all your modules:
+When executed, the `require.all` module actually returns a function. Since in javascript functions are objects, you can access your modules using `.` notation and at the same time have some extra functionality. Here you are allowed to quickly resolve all your modules. 
+
+For example, imagine that all your controllers are function constructors. In this case you are not interested in the controllers themselves but in having their instances. The next snippet will do exactly this:
 ```js
-// Imagine all you controllers are function constructors
 var controllers = require('require.all')('./controllers')(function(controllerName, Controller){
         return new Controller();
     })
@@ -34,8 +35,8 @@ same as:
 ```js
 // assumes you have controllers home.js and user.js
 var controllers = {
-    home: new require('./controllers/home.js'),
-    user: new require('./controllers/user.js'),
+    home: new require('./controllers/home.js')(),
+    user: new require('./controllers/user.js')(),
     ...
 }
 ```
