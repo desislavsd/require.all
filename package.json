@@ -1,0 +1,29 @@
+{
+  "name": "require.all",
+  "version": "1.0.0",
+  "description": "Apply filters and require all your modules or files in a directory, optionally quickly resolve the required modules with a custom function or arguments of choice.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/desislavsd/require.all.git"
+  },
+  "keywords": [
+    "require all",
+    "require",
+    "directory",
+    "include",
+    "dir",
+    "auto",
+    "automatic"
+    "all",
+  ],
+  "author": "desislavsd",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/desislavsd/require.all/issues"
+  },
+  "homepage": "https://github.com/desislavsd/require.all#readme"
+}
