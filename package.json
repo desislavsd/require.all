@@ -17,8 +17,8 @@
     "include",
     "dir",
     "auto",
-    "automatic"
     "all",
+    "automatic"
   ],
   "author": "desislavsd",
   "license": "MIT",

@@ -8,8 +8,7 @@ var dfts = {
         not:        /^\./,              // ignore files starting with .
         ignore:     /^\.|node_modules/, // ignore dirs  starting with .
         map:        map,
-        recursive:  false,
-        resolve:    false
+        recursive:  false
     }, options = extend(dfts), rsv = false, index, private = '_';
 
 
