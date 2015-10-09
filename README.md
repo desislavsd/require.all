@@ -137,7 +137,7 @@ extend.call(app.locals);
 // easely accessed in the middlewares
 app.use(function(req, res, next){
     extend.call(req)
-    req.extend( {models: models} );
+    req.extend( {models: models, controllers: controllers} );
     next();
 })
 
