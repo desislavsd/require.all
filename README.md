@@ -20,7 +20,6 @@ var homeController = controllers.home;
 * option to quickly resolve all required modules with a custom function
     - provides extreme flexibility and countless oportunities
 * convinient defaults - in most cases you will probably never touch them
-* option to clear the defaults
 * bonus - the module exports simple implementation of the `extend` function / method
 
 ## Advanced usage
@@ -107,17 +106,6 @@ map('home_controller')  // homeController
 map('_me to')           // MeTo
 ```
 - **recursive** - [boolean] - weather the package shuld traverse child directories or not
-## Aditional methods
-```js
-var require.all = require('require.all');
-
-require.all.clear()     // clears the defaults 
-require.all.reset()     // resets the defaults to the original default values
-require.all.set({})     // rewrites the defaults with the provided object
-require.all.defaults()  // returns clone object of the original defaults +
-                        // additional extend method that you may steal ;)
-                        // see how in the Extend section
-
 
 ## Examples
 ```js
@@ -130,4 +118,45 @@ app.get('/:controller', function(req, res, next){
     next();
 })
 app.listen(3000)
+```
+
+## Extend method - function([props, noExtend])
+```js
+var extend = require('require.all').extend;
+```
+The source:
+```js
+function extend(ps, noExtend){
+    var p, me = this == global ? {} : this;
+
+    for(p in ps || {}) ps.hasOwnProperty(p) && (me[p] = ps[p]);
+
+    return  (noExtend || me.exetend || (me.extend = extend)) && me;
+}
+```
+##### As function:
+```js
+var props = {foo: 'bar'};
+
+//create object with extend method
+var a = extend();               // { extend: [Function: extend] }
+
+//create object with extend method and add some properties
+var b = extend(props);          // { extend: [Function: extend], foo: 'bar' }
+
+// do not add extend method
+var c = extend(props, true);    // { foo: 'bar' }
+```
+##### As method:
+```js
+var props = {foo: 'bar'};
+var a = {};
+var b = {};
+
+// add extend method to object
+extend.call(a);                 // { extend: [Function: extend] }
+a.extend(props);                // { extend: [Function: extend], foo: 'bar' }
+
+// add extend method to object + some properties
+extend.call(b, props);          // { extend: [Function: extend], foo: 'bar' }
 ```

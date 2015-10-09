@@ -124,7 +124,7 @@ require.all = module.exports = extend.call(function(dir, opts){
         if(typeof dir == 'string') dir = {dir: dir};
         opts = extend(options).extend(opts).extend(dir);
         index = module.parent ? module.parent.filename : module.filename;
-        opts.dir = Path.resolve(Path.dirname(index), opts.dir);
+        opts.dir = Path.resolve(Path.dirname(index), opts.dir || '.');
         var mdls = requireAll.call(null, opts.dir, opts);
         return extend.call(resolve.bind(mdls), mdls, true);
     }, {
@@ -134,4 +134,4 @@ require.all = module.exports = extend.call(function(dir, opts){
         // you can not modify the defaults but you can awlays see them
         // *useful extend method exported 
         defaults: extend.bind({}, dfts)  
-    }, true);
+    });
