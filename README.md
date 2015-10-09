@@ -14,6 +14,7 @@ var homeController = controllers.home;
 * require all files within a directory - too easy
 * use relative or absolute paths
 * require directories recursively
+* parent file is always ignored to prevent infinite loops
 * filter files and directories using regular expressions or functions
 * change files and directories names in the returned reference object 
 * option to quickly resolve all required modules with custom arguments
@@ -75,13 +76,15 @@ require('require.all')()(function(name, module){
 ```
 *Notice:* If you want to resolve your modules with a single argument and it's type is `'function'`, you should use: `require('require.all')('./')([app])`.
 ## Defaults
-You can see the defaults by `require('require.all').defaults`; Modifying this object will not have effect.
+You can see the defaults through `require('require.all').defaults()`;
 ```js
 var defaults = {
         dir:        '.',                // current directory
         match:      null,               // match any file
         not:        /^\./,              // do not require files which name begins with '.'
-        ignore:     /^\.|node_modules/, // do not traverse dirs which name begins with '.'; ignore node_modules
+        ignore:     /^\.|node_modules/, // do not traverse dirs which name begins with '.'; 
+                                        // ignore node_modules
+                                        
         map:        map,                // remove extensions & transform to camelCased
         recursive:  false,              // do not traverse child directories
 }
