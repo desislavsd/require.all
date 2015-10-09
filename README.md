@@ -1,5 +1,5 @@
 # require.all
-Easy way to `require()` all your modules in a directory.
+Easy way to `require()` all your modules within a directory.
 ## Getting started
 ```sh
 $ npm install require.all --save
@@ -10,6 +10,19 @@ require.all = require('require.all');
 var controllers = require.all('./controllers');
 var homeController = controllers.home;
 ```
+### Features
+* require all files within a directory - too easy
+* use relative or absolute paths
+* require directories recursively
+* filter files and directories using regular expressions or functions
+* change files and directories names in the returned reference object 
+* option to quickly resolve all required modules with a custom arguments
+* option to quickly resolve all required modules with a custom function
+    - provides extreme flexibility and countless oportunities
+* convinient defaults - in most cases you will probably never touch them
+* option to clear the defaults
+* bonus - the module exports simple implementation of the `extend` function / method
+
 ## Advanced usage
 All parameters are optional. Executing `require('require.all')()` will require all the modules from the current (`'.'`) directory, using default options, and will return an object with their references. `require.all` accepts string parameter for the directory or object parameter with options or both. All of the followings are valid:
 ```js
