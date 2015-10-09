@@ -1,6 +1,6 @@
 {
   "name": "require.all",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Apply filters and require all your modules or files in a directory, optionally quickly resolve the required modules with a custom function or arguments of choice.",
   "main": "index.js",
   "scripts": {
@@ -12,13 +12,12 @@
   },
   "keywords": [
     "require all",
-    "require",
+    "require dir",
+    "require directory",
     "directory",
     "include",
-    "dir",
-    "auto",
     "all",
-    "automatic"
+    "auto"
   ],
   "author": "desislavsd",
   "license": "MIT",
