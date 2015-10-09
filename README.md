@@ -20,7 +20,7 @@ var homeController = controllers.home;
 * option to quickly resolve all required modules with a custom function
     - provides extreme flexibility and countless oportunities
 * convinient defaults - in most cases you will probably never touch them
-* bonus - the module exports simple implementation of the `extend` function / method
+* bonus - the module exports simple implementation of the `extend()` function / method
 
 ## Advanced usage
 All parameters are optional. Executing `require('require.all')()` will require all the modules from the current (`'.'`) directory, using default options, excluding current file, and will return an object with their references. `require.all` accepts string parameter for the directory or object parameter with options or both. All of the followings are valid:
@@ -112,9 +112,47 @@ map('_me to')           // MeTo
 var app = require('express')();
 var controllers = require('require.all')('./controllers');
 
+// attach controller to url
+app.get('/home', controllers.home);
+
+app.listen(3000)
+```
+Something more interesting:
+```js
+require.all = require('require.all');
+
+var app = require('express')();
+var extend = require.all.extend;
+
+var controllers = require.all('./controllers');
+var routes      = require.all('./routes');
+var models      = require.all('./models');
+
+// add extend method to app.locals
+extend.call(app.locals);
+
+// add extend method to request object
+// and use it to attach the models and
+// the controllers so that they may be 
+// easely accessed in the middlewares
+app.use(function(req, res, next){
+    extend.call(req)
+    req.extend( {models: models} );
+    next();
+})
+
+// assumes that routes are functions
+routes(function(name, route){
+    app.use(route);
+    return route;
+})
+
+// A bit more interesting route
+// This one needs improvements but for the sake of the example ;)
 app.get('/:controller', function(req, res, next){
+    // run the controller if it exists 
     if (controllers[req.params.controller])
-        return controllers[req.params.controller]();
+        return controllers[req.params.controller].apply(this, arguments);
     next();
 })
 app.listen(3000)
