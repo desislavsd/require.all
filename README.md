@@ -16,7 +16,7 @@ var homeController = controllers.home;
 * require directories recursively
 * filter files and directories using regular expressions or functions
 * change files and directories names in the returned reference object 
-* option to quickly resolve all required modules with a custom arguments
+* option to quickly resolve all required modules with custom arguments
 * option to quickly resolve all required modules with a custom function
     - provides extreme flexibility and countless oportunities
 * convinient defaults - in most cases you will probably never touch them
@@ -24,14 +24,14 @@ var homeController = controllers.home;
 * bonus - the module exports simple implementation of the `extend` function / method
 
 ## Advanced usage
-All parameters are optional. Executing `require('require.all')()` will require all the modules from the current (`'.'`) directory, using default options, and will return an object with their references. `require.all` accepts string parameter for the directory or object parameter with options or both. All of the followings are valid:
+All parameters are optional. Executing `require('require.all')()` will require all the modules from the current (`'.'`) directory, using default options, excluding current file, and will return an object with their references. `require.all` accepts string parameter for the directory or object parameter with options or both. All of the followings are valid:
 ```js
 var require.all = require('require.all');
 
 require.all();
 require.all('./');
 require.all( {dir: './'} );
-require.all('./', {recursive: true});
+require.all('./', {dir: './controllers'});     // './' will be used !!!
 ```
 Check out the full list of available options in the defaults section.
 
@@ -107,8 +107,19 @@ map('home_controller')  // homeController
 map('_me to')           // MeTo
 ```
 - **recursive** - [boolean] - weather the package shuld traverse child directories or not
+## Aditional methods
+```js
+var require.all = require('require.all');
 
-## Example
+require.all.clear()     // clears the defaults 
+require.all.reset()     // resets the defaults to the original default values
+require.all.set({})     // rewrites the defaults with the provided object
+require.all.defaults()  // returns clone object of the original defaults +
+                        // additional extend method that you may steal ;)
+                        // see how in the Extend section
+
+
+## Examples
 ```js
 var app = require('express')();
 var controllers = require('require.all')('./controllers');
