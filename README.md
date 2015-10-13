@@ -1,5 +1,5 @@
 # require.all
-Easy way to `require()` all your modules within a directory.
+Apply filters and `require()` all your modules or files in a directory, optionally quickly resolve the required modules with a custom function or arguments of choice.
 ## Getting started
 ```sh
 $ npm install require.all --save
@@ -79,14 +79,14 @@ require('require.all')()(function(name, module){
 You can see the defaults through `require('require.all').defaults()`;
 ```js
 var defaults = {
-        dir:        '.',                // current directory
-        match:      null,               // match any file
-        not:        /^\./,              // do not require files which name begins with '.'
-        ignore:     /^\.|node_modules/, // do not traverse dirs which name begins with '.'; 
-                                        // ignore node_modules
-                                        
-        map:        map,                // remove extensions & transform to camelCased
-        recursive:  false,              // do not traverse child directories
+    dir:        '.',                // current directory
+    match:      null,               // match any file
+    not:        /^\./,              // do not require files which name begins with '.'
+    ignore:     /^\.|node_modules/, // do not traverse dirs which name begins with '.'; 
+                                    // ignore node_modules
+                                    
+    map:        map,                // remove extensions & transform to camelCased
+    recursive:  false,              // do not traverse child directories
 }
 ```
 - **dir** - [string] - the directory to be required
