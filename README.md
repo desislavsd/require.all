@@ -39,9 +39,10 @@ When executed, the `require.all` module actually returns a function. Since in ja
 
 For example, imagine that all your controllers are function constructors. In this case you are not interested in the controllers themselves but in having their instances. The next snippet will do exactly this:
 ```js
-var controllers = require('require.all')('./controllers')(function(controllerName, Controller){
+var controllers = require('require.all')('./controllers')(
+    function(controllerName, Controller){
         return new Controller();
-    })
+    });
 // now controllers holds instances to the required modules
 ```
 same as: 
