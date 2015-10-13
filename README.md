@@ -1,5 +1,5 @@
 # require.all
-Apply filters and `require()` all your modules or files in a directory, optionally quickly resolve the required modules with a custom function or arguments of choice.
+Apply filters and `require()` all your modules or files within a directory, optionally quickly resolve the required modules with a custom function or arguments of choice.
 ## Getting started
 ```sh
 $ npm install require.all --save
