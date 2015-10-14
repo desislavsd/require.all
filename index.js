@@ -109,7 +109,7 @@ function resolve(f){
 
         //if it is function itself and must be resolved with given arguments
         } else if(typeof this[i] == 'function'){
-            this[i] = this[i].apply(this[i], f.constructor == Array && arguments.length == 1 ? f : arguments)
+            this[i] = this[i].apply(this[i], f && f.constructor == Array && arguments.length == 1 ? f : arguments)
         }
     }
 
