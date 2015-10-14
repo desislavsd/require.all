@@ -135,5 +135,7 @@ require.all = module.exports = extend.call(function(dir, opts){
         set: function(o){options = extend(o, true); return this},
         // you can not modify the defaults but you can awlays see them
         // *useful extend method exported 
-        defaults: extend.bind({}, dfts)  
+        defaults: extend.bind({}, dfts),
+        // use my map function in your custom map function
+        map: map  
     });
