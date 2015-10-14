@@ -97,13 +97,15 @@ function resolve(f){
         // here skip the inherited extend and push methods 
         if(!this.hasOwnProperty(i)) continue;
 
-        //if directory -> resolve again 
+        // if directory -> resolve again 
         if(this[i][private]){
             resolve.apply(this[i], arguments);
 
-        //if it must me resolved with external function
+        // if it must me resolved with external function
+        // if the functionon returns false - the reference 
+        // is to the original module
         } else if(arguments.length == 1 && typeof f == 'function'){
-            this[i] = f.call(this[i], i, this[i])
+            this[i] = f.call(this[i], i, this[i]) || this[i]
 
         //if it is function itself and must be resolved with given arguments
         } else if(typeof this[i] == 'function'){
