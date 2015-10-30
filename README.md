@@ -54,6 +54,23 @@ var controllers = {
     ...
 }
 ```
+```js
+var models = ('require.all')('./models', {
+    match:      /\.(js|json)$/,               // match any file 
+    not:        /^\./,              // do not require files which name begins with '.' 
+    ignore:     /^\.|node_modules/, // do not traverse dirs which name begins with '.';  
+                                    // ignore node_modules 
+                                    
+    map:        function map(name, path){ 
+                    // remove extensions & transform to camelCased 
+                    return Path.basename(name, Path.extname(name))
+                        .replace(/[\s\._-](\w)/g, function (m, c) {
+                            return c.toUpperCase();
+                        });
+                },                
+    recursive:  false,              // do not traverse child directories 
+})
+```
 The *resolve* functionality depends on the provided arguments: 
 ##### Case 1: provide one argument of type 'function'
 ```js
