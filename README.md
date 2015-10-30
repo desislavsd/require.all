@@ -12,8 +12,8 @@ var homeController = controllers.home;
 ```
 ```js
 var models = require('require.all')('./models', {
-        match:      /\.(js|json)$/,     // match any file 
-        not:        /^\./,              // do not require files which name begins with '.' 
+        match:      /\.(js|json)$/,     // match only .js and .json files
+        not:        /^\./,              // do not require files begining with '.' 
 
         // and more ... 
 
