@@ -19,7 +19,7 @@ var models = require('require.all')('./models', {
 
         // have a look at defaults and advanced usage
         // you can even easely resolve all your modules 
-    })
+    });
 ```
 ### Features
 * require all files within a directory - too easy
