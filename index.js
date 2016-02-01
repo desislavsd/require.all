@@ -8,7 +8,8 @@ var dfts = {
         not:        /^\./,              // ignore files starting with .
         ignore:     /^\.|node_modules/, // ignore dirs  starting with .
         map:        map,
-        recursive:  false
+        recursive:  false,
+        enc: 'utf-8'
     }, options = extend(dfts), rsv = false, index, private = '_';
 
 
@@ -18,7 +19,7 @@ var dfts = {
 function map(name, path){
 
     return Path.basename(name, Path.extname(name))
-        .replace(/[\s\._-](\w)/g, function (m, c) {
+        .replace(/[\s\._-]+?(\w)/g, function (m, c) {
             return c.toUpperCase();
         });
 }
@@ -34,8 +35,8 @@ function check(ts, prop, inv){
 
     return  true;
 }
-
 function addModule(name, path, opts){
+    console.log(name, path);
 
     // check if modules name passes match criteria 
     if(opts.match && !check(opts.match, name)) return;
@@ -46,7 +47,12 @@ function addModule(name, path, opts){
     // modify the name with the map function
     name = opts.map ? opts.map.call(name, name, path) : name;
 
-    mdl = require(path);
+    try { 
+        mdl = require(path) 
+    } catch (ex) { 
+        mdl = fs.readFileSync(path).toString(opts.enc) 
+    }
+
     return (this[name] = opts.resolve ? opts.resolve.call(mdl, name) : mdl) && this;
 }
 
@@ -70,7 +76,7 @@ function requireAll(dir, opts){
     dir = Path.resolve(dir); // lets use absolute path
 
     // if file is passed as dir simply require it
-    if( fs.statSync(dir).isFile() ) return require(dir);
+    if( fs.statSync(dir).isFile() ) return mdls.push(Path.basename(dir, Path.extname(dir)), dir, opts);
 
     // return 
     files = fs.readdirSync(dir);
