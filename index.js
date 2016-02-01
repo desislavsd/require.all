@@ -36,7 +36,6 @@ function check(ts, prop, inv){
     return  true;
 }
 function addModule(name, path, opts){
-    console.log(name, path);
 
     // check if modules name passes match criteria 
     if(opts.match && !check(opts.match, name)) return;
