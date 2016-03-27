@@ -1,215 +1,157 @@
-# require.all
-Apply filters and `require()` all your modules or files within a directory, optionally quickly resolve the required modules with a custom function or arguments of choice.
-## Getting started
+#require.all - function([dirname, options])
+Apply filters and `require`/read all files within a specified directory and optionally resolve them with custom function or arguments.
+
+##Usage
 ```sh
-$ npm install require.all --save
-```
-myFile.js:
-```js
-require.all = require('require.all');
-var controllers = require.all('./controllers');
-var homeController = controllers.home;
+$ npm install --save require.all
 ```
 ```js
-var models = require('require.all')('./models', {
-        match:      /\.(js|json)$/,     // match only .js and .json files
-        not:        /^\./,              // do not require files begining with '.' 
-
-        // and more ... 
-
-        // have a look at defaults and advanced usage
-        // you can even easely resolve all your modules 
-    });
-```
-### Features
-* require all files within a directory - too easy
-* use relative or absolute paths
-* require directories recursively
-* parent file is always ignored to prevent infinite loops
-* filter files and directories using regular expressions or functions
-* change files and directories names in the returned reference object 
-* option to quickly resolve all required modules with custom arguments
-* option to quickly resolve all required modules with a custom function
-    - provides extreme flexibility and countless oportunities
-* convinient defaults - in most cases you will probably never touch them
-* bonus - the module exports simple implementation of the `extend()` function / method
-
-## Advanced usage
-All parameters are optional. Executing `require('require.all')()` will require all the modules from the current (`'.'`) directory, using default options, excluding current file, and will return an object with their references. `require.all` accepts string parameter for the directory or object parameter with options or both. All of the followings are valid:
-```js
-var require.all = require('require.all');
-
-require.all();
-require.all('./');
-require.all( {dir: './'} );
-require.all('./', {dir: './controllers'});     // './' will be used !!!
-```
-Check out the full list of available options in the defaults section.
-
-When executed, the `require.all` module actually returns a function. Since in javascript functions are objects, you can access your modules using `.` notation and at the same time have some extra functionality. Here you are allowed to quickly resolve all your modules. 
-
-For example, imagine that all your controllers are function constructors. In this case you are not interested in the controllers themselves but in having their instances. The next snippet will do exactly this:
-```js
-var controllers = require('require.all')('./controllers')(
-    function(controllerName, Controller){
-        return new Controller();
-    });
-// now controllers holds instances to the required modules
-```
-same as: 
-```js
-// assumes you have controllers home.js and user.js
-var controllers = {
-    home: new require('./controllers/home.js')(),
-    user: new require('./controllers/user.js')(),
-    ...
-}
-```
-The *resolve* functionality depends on the provided arguments: 
-##### Case 1: provide one argument of type 'function'
-```js
-// executes the provided function on every module
-require('require.all')()(function(name, module){
-    console.log(this == module); // true
-})
-```
-##### Case 2: provide list or array of arguments
-```js
-// resolves every module of type 'function' with the provided arguments
-require('require.all')()(1,2,3,4)
-
-//same as
-require('require.all')()([1,2,3,4])
-
-//same as
-require('require.all')()(function(name, module){
-    return module(1,2,3,4)
-})
-```
-*Notice:* If you want to resolve your modules with a single argument and it's type is `'function'`, you should use: `require('require.all')('./')([app])`.
-## Defaults
-You can see the defaults through `require('require.all').defaults()`;
-```js
-var defaults = {
-    dir:        '.',                // current directory
-    match:      null,               // match any file
-    not:        /^\./,              // do not require files which name begins with '.'
-    ignore:     /^\.|node_modules/, // do not traverse dirs which name begins with '.'; 
-                                    // ignore node_modules
-                                    
-    map:        map,                // remove extensions & transform to camelCased
-    recursive:  false,              // do not traverse child directories
-}
-```
-- **dir** - [string] - the directory to be required
-- **match** - [regular expression] - require only files that match; If array of regular expressions is provided, files must match all of them
-- **not** - [regular expression] - require only files that do not match; If array of regular expressions is provided, files must not match all of them at the same time; use `|` in the RegExp to provide alternative criterias.
-- **ignore** - [regular expression] - traverse only directories that do not match; If array of regular expressions is provided, directories must not match all of them at the same time; use `|` in the RegExp to provide alternative criterias.
-- **map** - [function] - the function that the package uses for renaming directories and files; the default is:
-```js
-// removes extensions and converts names containing [\s\._-] to camelCased
-function map(name, path){
-
-    return Path.basename(name, Path.extname(name))
-        .replace(/[\s\._-](\w)/g, function (m, c) {
-            return c.toUpperCase();
-        });
-}
-
-map('home')             // home
-map('home_controller')  // homeController
-map('_me to')           // MeTo
-```
-- **recursive** - [boolean] - weather the package shuld traverse child directories or not
-
-## Examples
-```js
-var app = require('express')();
 var controllers = require('require.all')('./controllers');
 
-// attach controller to url
-app.get('/home', controllers.home);
-
-app.listen(3000)
+// now controllers is an object with references to all your controllers
 ```
-Something more interesting:
+##Advanced
+```js
+require.all = require('require.all');
+var app = require('express')();
+
+var controllers = require.all({
+    dir: './controllers',
+    match: /controller\.js$/, //only controllers
+    // use default mapping function and remove 'Controller' 
+    map: (name, path) => require.all.map(name, path).replace(/controller$/i, '')
+});
+
+controllers.home; // [function homeController]
+controllers.about; // [function aboutController]
+
+// resolve all controllers to have their instances
+controllers(function(name, Controller){
+    this === controller; // true
+    return new Controller(app);
+});
+// controllers.home is an instance of homeController
+```
+##Options and defaults
 ```js
 require.all = require('require.all');
 
-var app = require('express')();
-var extend = require.all.extend;
-
-var controllers = require.all('./controllers');
-var routes      = require.all('./routes');
-var models      = require.all('./models');
-
-// add extend method to app.locals
-extend.call(app.locals);
-
-// add extend method to request object
-// and use it to attach the models and
-// the controllers so that they may be 
-// easely accessed in the middlewares
-app.use(function(req, res, next){
-    extend.call(req)
-    req.extend( {models: models, controllers: controllers} );
-    next();
+var modules = require.all({
+        dir:        '.',
+        not:        /^\./,
+        match:      null,
+        map:        map,
+        ignore:     /^\.|node_modules/,
+        require:    /\.(js|json)$/,
+        recursive:  true,
+        encoding:   'utf-8',
+        tree:       true
 })
+```
+* **dir** - `[String]` - absolute or relative path to the directory to be traversed. By default it is the current directory but `require.all` will not require it's parent file to prevent infinite loops. 
+    * *default* - `'.'` - current directory
+* **not** - `[RegExp/Function/null]` - filter to specify which files to be skipped. Use `null` to disable.
+    * *default* - `/^\./` - skip files beginning with '.'
+* **match** - `[RegExp/Function/null]` - only matching files will be required. Use `null` to disable.
+    * *default* - `null` - do not apply match filter'
+* **map** - `[Function(name, path, isFile)]` - function to be used for renaming files and directories. Receives node's *name* and *path* and a flag which is true if the node is a file (false if dir). Must return the new *name* to be used.
+    * *default* - `map` - internal function that converts names to camelCased, skipping none word characters and skipping files extensions, allowing modules to be accessed through dot notation. 
+        * `require.all.map('my-lucky module.js'); // myLuckyModule`
+* **ignore** - `[RegExp/Function/null]` - filter to specify which child directories to be ignored. Applied only in recursive mode. Use `null` to disable.
+    * *default* - `/^\.|node_modules/` - ignore `node_modules` and folders beginning with `.`
+* **require** - `[RegExp/Function/null]` - filter to specify which files shall be loaded using `require`. Files that do not pass this filter will be loaded as a string. Use `null` to read all files as string.
+    * *default* - `/\.(js|json)$/` - only *.js* and *.json* files will be `require`-d
+* **recursive** - `[Boolean]` - specifies weather to traverse child directories too.
+    * *default* - `true`
+* **encoding** - `[String]` - the encoding to use for the files that will be read as string
+    * *default* - `'utf-8'`
+* **tree** - `[Boolean]` - determines weather the output object should mimic the structure of the files and folders, keeping the nesting level. If set to `false` all files will be on the same level. **WARNING**: *Files with same names will overwrite each other.**
+    * *default* - `true`
+##Resolve
+`require.all` actually returns a function which may be used to resolve all modules. Think of it as a `forEach` loop, that loops trough all the loaded modules. It may be applied as many times as you wish. It may be applied in two modes:
 
-// assumes that routes are functions
+1. If you pass no parameter or an array of parameters only the modules that are functions will be executed. If the return value is none falsy it will be the new value that will be available in the output of `require.all`.
+```js
+var modules = require.all('./modules');
+// assume we have module foo
+modules.foo; // function foo(){return function bar(a){ return a}}
+// execute all functions (resolve foo with no arguments)
+modules();
+// foo is now bar
+modules.foo; // function bar(a){ return a}
+// lets resolve bar
+modules();
+modules.foo; // function bar(a){ return a}
+// bar was resolved but since `a` was undefined modules.foo is still `bar`
+modules(["some none falsy value", "pointless"]);
+modules.foo; // "some none falsy value"
+```
+2. You may pass a single function and deal with the modules as you wish. The function is applied in the context of the module itself and receives the name of the module and the module as arguments.
+```js
+var modules = require.all('./modules');
+modules.foo; //function foo(){return true}
+modules(function(name, module){
+    this === module; // true
+    return module
+})
+modules.foo;// function foo
+//again we may keep on resolving
+modules()()()()();
+//modules.foo is now true since we resolved it in mode 1 and it returns true
+modules.foo; // true
+```
+*Notice:*
+```js
+require.all()(1,2,3);
+//same as 
+require.all()([1,2,3]);
+//same as 
+require.all()(funnction(name, mdl){
+    return mdl(1,2,3)
+});
+// so you may pass arguments as normal 
+// but if you want to pass a single argument 
+// which is an array or function you should do this:
+var arr = [], f = function(){};
+require.all()([arr]);
+require.all()([f]);
+// or 
+require.all()(arr, undefined);
+require.all()(f, undefined);
+```
+## Complete example
+```js
+require.all = require('require.all');
+var express = require('express');
+var app = express(),
+    cfg = require.all('./config/'),
+    controllers = require.all('./controllers'),
+    models = require.all('./models'),
+    routes = require.all('./routes');
+    
+//pass models to controllers
+controllers([models]); // models is an array!
+
+Object.assign(app, {controllers, models});
+
+// assume we have model for each page
+app.use('/:page*', function(req, res, next){
+    var page = req.params.page;
+    res.model = models[page];
+    next();
+});
+
+// pass the controllers to all routes
+routes(controllers, undefined); // controllers is also array!
+
+// now the routes are ready to be bound;
 routes(function(name, route){
-    app.use(route);
-    return route;
-})
+    return app.use('/' + name, route), route;
+});
 
-// A bit more interesting route
-// This one needs improvements but for the sake of the example ;)
-app.get('/:controller', function(req, res, next){
-    // run the controller if it exists 
-    if (controllers[req.params.controller])
-        return controllers[req.params.controller].apply(this, arguments);
-    next();
-})
-app.listen(3000)
-```
+// our app is ready that quickly... :)
+app.listen(cfg.port, cfg.host, ()=>{
+    console.log('App is running on %s:%s', cfg.port, cfg.host);
+});
 
-## Extend method - function([props, noExtend])
-```js
-var extend = require('require.all').extend;
-```
-The source:
-```js
-function extend(ps, noExtend){
-    var p, me = this == global ? {} : this;
-
-    for(p in ps || {}) ps.hasOwnProperty(p) && (me[p] = ps[p]);
-
-    return  (noExtend || me.exetend || (me.extend = extend)) && me;
-}
-```
-##### As function:
-```js
-var props = {foo: 'bar'};
-
-//create object with extend method
-var a = extend();               // { extend: [Function: extend] }
-
-//create object with extend method and add some properties
-var b = extend(props);          // { extend: [Function: extend], foo: 'bar' }
-
-// do not add extend method
-var c = extend(props, true);    // { foo: 'bar' }
-```
-##### As method:
-```js
-var props = {foo: 'bar'};
-var a = {};
-var b = {};
-
-// add extend method to object
-extend.call(a);                 // { extend: [Function: extend] }
-a.extend(props);                // { extend: [Function: extend], foo: 'bar' }
-
-// add extend method to object + some properties
-extend.call(b, props);          // { extend: [Function: extend], foo: 'bar' }
 ```
