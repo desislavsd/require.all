@@ -1,5 +1,5 @@
 #require.all - function([dirname, options])
-Apply filters and `require`/read all files within a specified directory and optionally resolve them with custom function or arguments.
+Apply filters and `require()`/read all files within a specified directory and optionally resolve them with custom function or arguments.
 
 ##Usage
 ```sh
@@ -70,7 +70,7 @@ var modules = require.all({
 ##Resolve
 `require.all` actually returns a function which may be used to resolve all modules. Think of it as a `forEach` loop, that loops trough all the loaded modules. It may be applied as many times as you wish. It may be applied in two modes:
 
-1. If you pass no parameter or an array of parameters only the modules that are functions will be executed. If the return value is none falsy it will be the new value that will be available in the output of `require.all`.
+* If you pass no parameter or an array of parameters only the modules that are functions will be executed. If the return value is none falsy it will be the new value that will be available in the output of `require.all`.
 ```js
 var modules = require.all('./modules');
 // assume we have module foo
@@ -86,7 +86,7 @@ modules.foo; // function bar(a){ return a}
 modules(["some none falsy value", "pointless"]);
 modules.foo; // "some none falsy value"
 ```
-2. You may pass a single function and deal with the modules as you wish. The function is applied in the context of the module itself and receives the name of the module and the module as arguments.
+* You may pass a single function and deal with the modules as you wish. The function is applied in the context of the module itself and receives the name of the module and the module as arguments.
 ```js
 var modules = require.all('./modules');
 modules.foo; //function foo(){return true}
@@ -124,7 +124,7 @@ require.all()(f, undefined);
 require.all = require('require.all');
 var express = require('express');
 var app = express(),
-    cfg = require.all('./config/'),
+    cfg = require.all('./config'),
     controllers = require.all('./controllers'),
     models = require.all('./models'),
     routes = require.all('./routes');
