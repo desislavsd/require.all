@@ -67,6 +67,7 @@ var modules = require.all({
     * *default* - `'utf-8'`
 * **tree** - `[Boolean]` - determines weather the output object should mimic the structure of the files and folders, keeping the nesting level. If set to `false` all files will be on the same level. **WARNING**: *Files with same names will overwrite each other.**
     * *default* - `true`
+    
 ##Resolve
 `require.all` actually returns a function which may be used to resolve all modules. Think of it as a `forEach` loop, that loops trough all the loaded modules. It may be applied as many times as you wish. It may be applied in two modes:
 
@@ -124,7 +125,7 @@ require.all()(f, undefined);
 require.all = require('require.all');
 var express = require('express');
 var app = express(),
-    cfg = require.all('./config'),
+    cfg = require.all('./config/'),
     controllers = require.all('./controllers'),
     models = require.all('./models'),
     routes = require.all('./routes');
