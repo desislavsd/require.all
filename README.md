@@ -10,15 +10,13 @@ var controllers = require('require.all')('./controllers');
 
 // now controllers is an object with references to all your controllers
 // for example:
-/*
-{
-    home: function homeController,
-    about: function aboutController,
+/* {
+    home: function homeController(){},
+    about: function aboutController(){},
     admin: {
-            adminHome: function adminHome 
+            adminHome: function adminHome(){} 
         }  
-}
-*/
+} */
 ```
 ##Advanced
 ```js
