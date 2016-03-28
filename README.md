@@ -77,9 +77,9 @@ var modules = require.all({
     * *default* - `true`
 
 ##Resolve
-`require.all` actually returns a function which may be used to resolve all modules. Think of it as a `forEach` loop, that loops trough all the loaded modules. It may be applied as many times as you wish. It may be applied in two modes:
+`require.all()` actually returns a function which may be used to resolve all modules. Think of it as a `forEach` loop, that loops trough all the loaded modules. It may be applied as many times as you wish. It may be applied in two modes:
 
-* If you pass no parameter or an array of parameters only the modules that are functions will be executed. If the return value is none falsy it will be the new value that will be available in the output of `require.all`.
+* If you pass no parameter or an array of parameters only the modules that are functions will be executed. If the return value is none falsy it will be the new value that will be available in the returned from `require.all()` object (function).
 ```js
 var modules = require.all('./modules');
 // assume we have module foo
