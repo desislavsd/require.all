@@ -9,6 +9,16 @@ $ npm install --save require.all
 var controllers = require('require.all')('./controllers');
 
 // now controllers is an object with references to all your controllers
+// for example:
+/*
+{
+    home: function homeController,
+    about: function aboutController,
+    admin: {
+            adminHome: function adminHome 
+        }  
+}
+*/
 ```
 ##Advanced
 ```js
@@ -67,7 +77,7 @@ var modules = require.all({
     * *default* - `'utf-8'`
 * **tree** - `[Boolean]` - determines weather the output object should mimic the structure of the files and folders, keeping the nesting level. If set to `false` all files will be on the same level. **WARNING**: *Files with same names will overwrite each other.**
     * *default* - `true`
-    
+
 ##Resolve
 `require.all` actually returns a function which may be used to resolve all modules. Think of it as a `forEach` loop, that loops trough all the loaded modules. It may be applied as many times as you wish. It may be applied in two modes:
 
