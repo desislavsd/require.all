@@ -14,7 +14,7 @@
     "require all",
     "require dir",
     "require directory",
-    "autoloader"
+    "autoloader",
     "include",
     "all",
     "auto"
