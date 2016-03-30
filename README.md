@@ -8,37 +8,41 @@ $ npm install --save require.all
 ```js
 var controllers = require('require.all')('./controllers');
 
-// now controllers is an object with references to all your controllers
-// for example:
-/* {
-    home: function homeController(){},
-    about: function aboutController(){},
+// same as
+var controllers = {
+    homeController: require('./controllers/home-controller.js'),
+    aboutController: require('./controllers/about-controller.js'),
     admin: {
-            adminHome: function adminHome(){} 
-        }  
-} */
+        dashboardController: require('./controllers/admin/dashboard-controller.js')
+    }
+    // ...
+}
 ```
 ##Advanced
 ```js
 require.all = require('require.all');
-var app = require('express')();
 
 var controllers = require.all({
     dir: './controllers',
-    match: /controller\.js$/, //only controllers
-    // use default mapping function and remove 'Controller' 
-    map: (name, path) => require.all.map(name, path).replace(/controller$/i, '')
-});
+    match: /controller\.js$/i, //only files that end with 'controller.js'
+    recursive: false,
 
-controllers.home; // [function homeController]
-controllers.about; // [function aboutController]
+    // rename module: use default mapping function and remove 'controller' from the end
+    map: (name, path, isFile) => require.all.map(name, path, isFile).replace(/controller$/i, '')
+});
 
 // resolve all controllers to have their instances
 controllers(function(name, Controller){
     this === controller; // true
-    return new Controller(app);
+    return new Controller();
 });
-// controllers.home is an instance of homeController
+
+// the above code does the same as
+var controllers = {
+    home: new require('./controllers/home-controller.js')(),
+    about: new require('./controllers/about-controller.js')()
+    // ...
+};
 ```
 ##Options and defaults
 ```js
@@ -56,28 +60,39 @@ var modules = require.all({
         tree:       true
 })
 ```
-* **dir** - `[String]` - absolute or relative path to the directory to be traversed. By default it is the current directory but `require.all` will not require it's parent file to prevent infinite loops. 
-    * *default* - `'.'` - current directory
-* **not** - `[RegExp/Function/null]` - filter to specify which files to be skipped. Use `null` to disable.
-    * *default* - `/^\./` - skip files beginning with '.'
-* **match** - `[RegExp/Function/null]` - only matching files will be required. Use `null` to disable.
-    * *default* - `null` - do not apply match filter'
-* **map** - `[Function(name, path, isFile)]` - function to be used for renaming files and directories. Receives node's *name* and *path* and a flag which is true if the node is a file (false if dir). Must return the new *name* to be used.
-    * *default* - `map` - internal function that converts names to camelCased, skipping none word characters and skipping files extensions, allowing modules to be accessed through dot notation. 
-        * `require.all.map('my-lucky module.js'); // myLuckyModule`
-* **ignore** - `[RegExp/Function/null]` - filter to specify which child directories to be ignored. Applied only in recursive mode. Use `null` to disable.
-    * *default* - `/^\.|node_modules/` - ignore `node_modules` and folders beginning with `.`
-* **require** - `[RegExp/Function/null]` - filter to specify which files shall be loaded using `require`. Files that do not pass this filter will be loaded as a string. Use `null` to read all files as string.
-    * *default* - `/\.(js|json)$/` - only *.js* and *.json* files will be `require`-d
-* **recursive** - `[Boolean]` - specifies weather to traverse child directories too.
-    * *default* - `true`
-* **encoding** - `[String]` - the encoding to use for the files that will be read as string
-    * *default* - `'utf-8'`
-* **tree** - `[Boolean]` - determines weather the output object should mimic the structure of the files and folders, keeping the nesting level. If set to `false` all files will be on the same level. **WARNING**: *Files with same names will overwrite each other.**
-    * *default* - `true`
+* __dir__ - `[String]` - absolute or relative path to the directory to be traversed. By default it is the current directory but `require.all` will not require it's parent file to prevent infinite loops. 
 
+    * _default_ - `'.'` - current directory
+* __not__ - `[RegExp/Function(name)/null]` - filter to specify which files to be skipped. Use `null` to disable.
+    * _default_ - `/^\./` - skip files beginning with '.'
+
+* __match__ - `[RegExp/Function(name)/null]` - only matching files will be required. Use `null` to disable.
+    * _default_ - `null` - do not apply match filter'
+
+* __map__ - `[Function(name, path, isFile)]` - function to be used for renaming files and directories. Receives node's *name* and *path* and a flag which is true if the node is a file (false if dir). Must return the new *name* to be used.
+    * _default_ - `map` - internal function that converts names to camelCased, skipping none word characters and skipping files extensions, allowing modules to be accessed through dot notation. 
+        * `require.all.map('my-lucky module.js'); // myLuckyModule`
+
+* __ignore__ - `[RegExp/Function(name)/null]` - filter to specify which child directories to be ignored. Applied only in recursive mode. Use `null` to disable.
+    * _default_ - `/^\.|node_modules/` - ignore `node_modules` and folders beginning with `.`
+
+* __require__ - `[RegExp/Function(name)/null]` - filter to specify which files shall be loaded using `require`. Files that do not pass this filter will be loaded as a string. Use `null` to read all files as string.
+    * _default_ - `/\.(js|json)$/` - only *.js* and *.json* files will be `require`-d
+
+* __recursive__ - `[Boolean]` - specifies weather to traverse child directories too.
+    * _default_ - `true`
+
+* __encoding__ - `[String]` - the encoding to use for the files that will be read as string
+    * _default_ - `'utf-8'`
+
+* __tree__ - `[Boolean]` - determines weather the output object should mimic the structure of the files and folders, keeping the nesting level. If set to `false` all files will be on the same level.
+    * _default_ - `true`
+
+**WARNING**: *Nodes (files and dirs) with same names on the same level will overwrite each other. If `tree` option is set to `false` directory names don't matter but keep in mind that all files are loaded on the same level so they all must have unique names.*
+
+**WARNING**: *File names and dirnames must not resolve (after the map function if any) to one of the following: name, arguments, caller, length*
 ##Resolve
-`require.all()` actually returns a function which may be used to resolve all modules. Think of it as a `forEach` loop, that loops trough all the loaded modules. It may be applied as many times as you wish. It may be applied in two modes:
+`require.all()` actually returns a function which may be used to resolve all modules. Think of it as a `forEach` loop, that loops trough all the loaded modules. It may be applied as many times as you wish in two possible modes:
 
 * If you pass no parameter or an array of parameters only the modules that are functions will be executed. If the return value is none falsy it will be the new value that will be available in the returned from `require.all()` object (function).
 ```js
@@ -92,7 +107,9 @@ modules.foo; // function bar(a){ return a}
 modules();
 modules.foo; // function bar(a){ return a}
 // bar was resolved but since `a` was undefined modules.foo is still `bar`
+// lets resolve with array of none falsy values, that shall be passed as arguments 
 modules(["some none falsy value", "pointless"]);
+// modules.foo returns `a`, the first argument, which now is none falsy so:
 modules.foo; // "some none falsy value"
 ```
 * You may pass a single function and deal with the modules as you wish. The function is applied in the context of the module itself and receives the name of the module and the module as arguments.
@@ -119,8 +136,8 @@ require.all()(funnction(name, mdl){
     return mdl(1,2,3)
 });
 // so you may pass arguments as normal 
-// but if you want to pass a single argument 
-// which is an array or function you should do this:
+// but if you want to pass a SINGLE argument 
+// which is an ARRAY or FUNCTION you should do this:
 var arr = [], f = function(){};
 require.all()([arr]);
 require.all()([f]);
@@ -139,7 +156,7 @@ var app = express(),
     routes = require.all('./routes');
     
 //pass models to controllers
-controllers([models]); // models is an array!
+controllers([models]); // models is function!
 
 Object.assign(app, {controllers, models});
 
@@ -151,7 +168,7 @@ app.use('/:page*', function(req, res, next){
 });
 
 // pass the controllers to all routes
-routes(controllers, undefined); // controllers is also array!
+routes(controllers, undefined); // controllers is also function!
 
 // now the routes are ready to be bound;
 routes(function(name, route){

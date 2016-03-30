@@ -1,7 +1,7 @@
 {
   "name": "require.all",
   "version": "2.0.0",
-  "description": "Apply filters and require all your modules or files in a directory, optionally quickly resolve the required modules with a custom function or arguments of choice.",
+  "description": "Apply filters and `require()`/read all files within a specified directory and optionally resolve them with custom function or arguments.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,7 @@
     "require all",
     "require dir",
     "require directory",
-    "directory",
+    "autoloader"
     "include",
     "all",
     "auto"
