@@ -76,7 +76,7 @@ module.exports = (function(){
         if(isFile) 
             name = p.basename(name, p.extname(name));
 
-        return name.replace(/[\W]+(\w)/g, (m, c) => c.toUpperCase())
+        return name.replace(/\W+(\w|$)/g, (m, c) => c.toUpperCase())
     }
 
     /* resolves the modules */
