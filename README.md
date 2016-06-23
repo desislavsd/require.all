@@ -92,7 +92,7 @@ var modules = require.all({
 
 **WARNING**: *File names and dirnames must not resolve (after the map function if any) to one of the following: name, arguments, caller, length*
 ##Resolve
-`require.all()` actually returns a function which may be used to resolve all modules. Think of it as a `forEach` loop, that loops trough all the loaded modules. It may be applied as many times as you wish in two possible modes:
+`require.all()` actually returns a function which may be used to resolve all modules. It acts much like `Array.prototype.map`, looping trough all the loaded modules (see examples below!). It may be applied as many times as you wish in two possible modes:
 
 * If you pass no parameter or an array of parameters only the modules that are functions will be executed. If the return value is none falsy it will be the new value that will be available in the returned from `require.all()` object (function).
 ```js

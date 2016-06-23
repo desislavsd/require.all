@@ -1,7 +1,7 @@
 {
   "name": "require.all",
   "version": "2.0.2",
-  "description": "Apply filters and require/read all files within a directory and optionally resolve them with custom function or arguments.",
+  "description": "Apply filters and require all or read all files within a directory and optionally resolve them, as much times as you wish, with custom function or arguments.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,6 +11,7 @@
     "url": "git+https://github.com/desislavsd/require.all.git"
   },
   "keywords": [
+    "require",
     "require all",
     "require dir",
     "require directory",
