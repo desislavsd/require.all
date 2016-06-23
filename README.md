@@ -181,3 +181,5 @@ app.listen(cfg.port, cfg.host, ()=>{
 });
 
 ```
+
+*Hey, if something is missing or you want to suggest improvements and features, you are wellcome.*

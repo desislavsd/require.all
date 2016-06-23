@@ -1,7 +1,7 @@
 {
   "name": "require.all",
   "version": "2.0.2",
-  "description": "Apply filters and require all or read all files within a directory and optionally resolve them, as much times as you wish, with custom function or arguments.",
+  "description": "Apply filters and require all files or read all files within a directory and optionally resolve them, as much times as you wish, with custom function or arguments.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
