@@ -1,7 +1,7 @@
-#require.all - function([dirname, options])
+# require.all - function([dirname, options])
 Apply filters and `require()`/read all files within a specified directory and optionally resolve them with custom function or arguments.
 
-##Usage
+## Usage
 ```sh
 $ npm install --save require.all
 ```
@@ -18,7 +18,7 @@ var controllers = {
     // ...
 }
 ```
-##Advanced
+## Advanced
 ```js
 require.all = require('require.all');
 
@@ -44,7 +44,7 @@ var controllers = {
     // ...
 };
 ```
-##Options and defaults
+## Options and defaults
 ```js
 require.all = require('require.all');
 
@@ -79,19 +79,19 @@ var modules = require.all({
 * __require__ - `[RegExp/Function(name)/null]` - filter to specify which files shall be loaded using `require`. Files that do not pass this filter will be loaded as a string. Use `null` to read all files as string.
     * _default_ - `/\.(js|json)$/` - only *.js* and *.json* files will be `require`-d
 
-* __recursive__ - `[Boolean]` - specifies weather to traverse child directories too.
+* __recursive__ - `[Boolean]` - specifies whether to traverse child directories too.
     * _default_ - `true`
 
 * __encoding__ - `[String]` - the encoding to use for the files that will be read as string
     * _default_ - `'utf-8'`
 
-* __tree__ - `[Boolean]` - determines weather the output object should mimic the structure of the files and folders, keeping the nesting level. If set to `false` all files will be on the same level.
+* __tree__ - `[Boolean]` - determines whether the output object should mimic the structure of the files and folders, keeping the nesting level. If set to `false` all files will be on the same level.
     * _default_ - `true`
 
 **WARNING**: *Nodes (files and dirs) with same names on the same level will overwrite each other. If `tree` option is set to `false` directory names don't matter but keep in mind that all files are loaded on the same level so they all must have unique names.*
 
 **WARNING**: *File names and dirnames must not resolve (after the map function if any) to one of the following: name, arguments, caller, length*
-##Resolve
+## Resolve
 `require.all()` actually returns a function which may be used to resolve all modules. It acts much like `Array.prototype.map`, looping trough all the loaded modules (see examples below!). It may be applied as many times as you wish in two possible modes:
 
 * If you pass no parameter or an array of parameters only the modules that are functions will be executed. If the return value is none falsy it will be the new value that will be available in the returned from `require.all()` object (function).
@@ -182,4 +182,4 @@ app.listen(cfg.port, cfg.host, ()=>{
 
 ```
 
-*Hey, if something is missing or you want to suggest improvements and features, you are wellcome.*
+*Hey, if something is missing or you want to suggest improvements and features, you are welcome.*
