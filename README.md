@@ -60,33 +60,17 @@ var modules = require.all({
         tree:       true
 })
 ```
-* __dir__ - `[String]` - absolute or relative path to the directory to be traversed. By default it is the current directory but `require.all` will not require it's parent file to prevent infinite loops. 
-
-    * _default_ - `'.'` - current directory
-* __not__ - `[RegExp/Function(name)/null]` - filter to specify which files to be skipped. Use `null` to disable.
-    * _default_ - `/^\./` - skip files beginning with '.'
-
-* __match__ - `[RegExp/Function(name)/null]` - only matching files will be required. Use `null` to disable.
-    * _default_ - `null` - do not apply match filter'
-
-* __map__ - `[Function(name, path, isFile)]` - function to be used for renaming files and directories. Receives node's *name* and *path* and a flag which is true if the node is a file (false if dir). Must return the new *name* to be used.
-    * _default_ - `map` - internal function that converts names to camelCased, skipping none word characters and skipping files extensions, allowing modules to be accessed through dot notation. 
-        * `require.all.map('my-lucky module.js'); // myLuckyModule`
-
-* __ignore__ - `[RegExp/Function(name)/null]` - filter to specify which child directories to be ignored. Applied only in recursive mode. Use `null` to disable.
-    * _default_ - `/^\.|node_modules/` - ignore `node_modules` and folders beginning with `.`
-
-* __require__ - `[RegExp/Function(name)/null]` - filter to specify which files shall be loaded using `require`. Files that do not pass this filter will be loaded as a string. Use `null` to read all files as string.
-    * _default_ - `/\.(js|json)$/` - only *.js* and *.json* files will be `require`-d
-
-* __recursive__ - `[Boolean]` - specifies whether to traverse child directories too.
-    * _default_ - `true`
-
-* __encoding__ - `[String]` - the encoding to use for the files that will be read as string
-    * _default_ - `'utf-8'`
-
-* __tree__ - `[Boolean]` - determines whether the output object should mimic the structure of the files and folders, keeping the nesting level. If set to `false` all files will be on the same level.
-    * _default_ - `true`
+Option | Type | Default | Description
+-|-|-|-
+`dir` | String | `'.'` | Absolute or relative path to the directory to be traversed. `require.all` will not require it's parent file to prevent infinite loops. _Default: current directory_
+`not`|RegExp/Function(name)/null| `/^\./` | Filter to specify which files to be skipped. Use `null` to disable. _Default: skip files beginning with `'.'`_
+`match` | RegExp/Function(name)/null | `null` | Only matching files will be required. Use `null` to disable.
+`map`| Function(name, path, isFile) | `require.all.map` | Function to be used for renaming files and directories. Receives node's *name* and *path* and a flag which is true if the node is a file (false if dir). Must return the new *name* to be used. _Default: convert to camelCased_
+`ignore`| RegExp/Function(name)/null | `/^\.|node_modules/` | Filter to specify which child directories to be ignored. Applied only in recursive mode. Use `null` to disable. _Default: ignore `node_modules` and folders beginning with `.`_
+`require` | RegExp/Function(name)/null | `/\.(js|json)$/` | Filter to specify which files shall be loaded using `require`. Files that do not pass this filter will be loaded as a string. Use `null` to read all files as string. _Default: only *.js* and *.json* files will be `require`-d_
+`recursive` | Boolean | `true` | Specifies whether to traverse child directories too.
+`encoding` | String | `'utf-8'` | The encoding to use for the files that will be read as string.
+`tree` | Boolean | `true` | Determines whether the output object should mimic the structure of the files and folders, keeping the nesting level. If set to `false` all files will be on the same level.
 
 **WARNING**: *Nodes (files and dirs) with same names on the same level will overwrite each other. If `tree` option is set to `false` directory names don't matter but keep in mind that all files are loaded on the same level so they all must have unique names.*
 
