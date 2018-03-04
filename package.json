@@ -1,6 +1,6 @@
 {
   "name": "require.all",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Apply filters and require all files in a directory or read all files from a dir and optionally resolve them, as much times as you wish, with custom function or arguments.",
   "main": "index.js",
   "scripts": {
