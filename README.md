@@ -66,8 +66,8 @@ Option | Type | Default | Description
 `not`|RegExp/Function(name)/null| `/^\./` | Filter to specify which files to be skipped. Use `null` to disable. _Default: skip files beginning with `'.'`_
 `match` | RegExp/Function(name)/null | `null` | Only matching files will be required. Use `null` to disable.
 `map`| Function(name, path, isFile) | `require.all.map` | Function to be used for renaming files and directories. Receives node's *name* and *path* and a flag which is true if the node is a file (false if dir). Must return the new *name* to be used. _Default: convert to camelCased_
-`ignore`| RegExp/Function(name)/null | <code>/^\.&#124;node_modules/</code> | Filter to specify which child directories to be ignored. Applied only in recursive mode. Use `null` to disable. _Default: ignore `node_modules` and folders beginning with `.`_
-`require` | RegExp/Function(name)/null | <code>/\.(js&#124;json)$/</code> | Filter to specify which files shall be loaded using `require`. Files that do not pass this filter will be loaded as a string. Use `null` to read all files as string. _Default: only *.js* and *.json* files will be `require`-d_
+`ignore`| RegExp/Function(name)/null | <code>/^\\.&#124;node_modules/</code> | Filter to specify which child directories to be ignored. Applied only in recursive mode. Use `null` to disable. _Default: ignore `node_modules` and folders beginning with `.`_
+`require` | RegExp/Function(name)/null | <code>/\\.(js&#124;json)$/</code> | Filter to specify which files shall be loaded using `require`. Files that do not pass this filter will be loaded as a string. Use `null` to read all files as string. _Default: only *.js* and *.json* files will be `require`-d_
 `recursive` | Boolean | `true` | Specifies whether to traverse child directories too.
 `encoding` | String | `'utf-8'` | The encoding to use for the files that will be read as string.
 `tree` | Boolean | `true` | Determines whether the output object should mimic the structure of the files and folders, keeping the nesting level. If set to `false` all files will be on the same level.
