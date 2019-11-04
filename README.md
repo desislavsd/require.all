@@ -74,7 +74,10 @@ Option | Type | Default | Description
 
 **WARNING**: *Nodes (files and dirs) with same names on the same level will overwrite each other. If `tree` option is set to `false` directory names don't matter but keep in mind that all files are loaded on the same level so they all must have unique names.*
 
-**WARNING**: *File names and dirnames must not resolve (after the map function if any) to one of the following: name, arguments, caller, length*
+**WARNING**: *File names and dirnames must not resolve (after the map function if any) to one of the following: **name, arguments, caller, length***
+
+**WARNING**: *Currently nested calls to `require.all` are not supported - you cannot use `require.all` to require a file that uses `require.all` itself. See this [issue]( https://github.com/desislavsd/require.all/issues/3 )*
+
 ## Resolve
 `require.all()` actually returns a function which may be used to resolve all modules. It acts much like `Array.prototype.map`, looping trough all the loaded modules (see examples below!). It may be applied as many times as you wish in two possible modes:
 
